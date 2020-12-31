@@ -10,16 +10,19 @@ import { ChatService } from '../../services/chat.service';
 export class ChatComponent implements OnInit {
 
 
-  message :String;
+message :String;
   constructor(private chatService: ChatService) { 
     this.chatService.loadMessages()
       .subscribe(res =>{
         console.log(res);
       });
+
   }
+  
 
   ngOnInit(): void {
   }
+
 
   send_message(){
     console.log(this.message);
