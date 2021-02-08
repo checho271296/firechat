@@ -1,3 +1,4 @@
+import { renderFlagCheckIfStmt } from '@angular/compiler/src/render3/view/template';
 import { Component, OnInit } from '@angular/core';
 import { ChatService } from '../../services/chat.service';
 
@@ -10,22 +11,28 @@ import { ChatService } from '../../services/chat.service';
 export class ChatComponent implements OnInit {
 
 
-message :String;
-  constructor(private chatService: ChatService) { 
-    this.chatService.loadMessages()
-      .subscribe(res =>{
-        console.log(res);
-      });
+  message :string;
+  element :any;
 
-  }
-  
 
+  constructor(public chatService: ChatService) { 
+      this.chatService.loadMessages()
+        .subscribe(()=>{
+          setTimeout(()=>this.element.scrollTop = this.element.scrollHeight,20)
+        })
+    }
+    
   ngOnInit(): void {
-  }
+    this.element = document.getElementById('app-mensajes');
 
+  }
 
   send_message(){
-    console.log(this.message);
+    if (this.message.length ===0) return ;
+
+    this.chatService.addMessage(this.message)
+                    .then(() => this.message='')
+                    .catch((err) => console.error(err));
   }
 
 }
